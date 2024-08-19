@@ -1,3 +1,5 @@
+@file:Suppress("VulnerableCodeUsages")
+
 package com.impact.network.special
 
 import baubles.api.BaublesApi
@@ -14,13 +16,13 @@ import space.impact.packet_network.network.packets.ImpactPacket
 class LaserPushPacket(
     packetId: Int,
     val dim: Int = 0,
-    val vec1: Vector3i = Vector3i(),
-    val vec2: Vector3i = Vector3i(),
+    private val vec1: Vector3i = Vector3i(),
+    private val vec2: Vector3i = Vector3i(),
     val color: Int = 0,
     val mode: Int = 0,
-    val lifeTime: Int = 20,
+    private val lifeTime: Int = 20,
     val type: Int = 1,
-    val endMode: Float = 1f,
+    private val endMode: Float = 1f,
 ) : ImpactPacket(packetId) {
 
     fun transaction(dim: Int, vec1: Vector3i, vec2: Vector3i, color: Int, mode: Int): LaserPushPacket {
@@ -58,31 +60,31 @@ class LaserPushPacket(
 
     override fun processClient(mc: Minecraft, world: IBlockAccess) {
         if (world is World && dim == world.provider.dimensionId) {
-            when (mode) {
-                0 -> {
-                    var mask = false
-                    val player = mc.thePlayer
-                    var stack = player.getCurrentArmor(3)
-                    if (stack == null || stack.item !is MaskOfVision) {
-                        val handler = BaublesApi.getBaubles(player)
-                        if (handler != null) {
-                            for (i in 0 until handler.sizeInventory) {
-                                stack = handler.getStackInSlot(i)
-                                if (stack != null && stack.item is MaskOfVision) {
-                                    mask = true
-                                    break
-                                }
-                            }
+
+            var mask = false
+            val player = mc.thePlayer
+            var stack = player.getCurrentArmor(3)
+            if (stack == null || stack.item !is MaskOfVision) {
+                val handler = BaublesApi.getBaubles(player)
+                if (handler != null) {
+                    for (i in 0 until handler.sizeInventory) {
+                        stack = handler.getStackInSlot(i)
+                        if (stack != null && stack.item is MaskOfVision) {
+                            mask = true
+                            break
                         }
-                    } else {
-                        mask = true
-                    }
-                    if (mask) {
-                        impact.proxy.beam(world, vec1, vec2, type, color, false, endMode, lifeTime)
                     }
                 }
+            } else {
+                mask = true
+            }
 
-                1 -> {
+            when (mode) {
+                0 -> if (mask) {
+                    impact.proxy.beam(world, vec1, vec2, type, color, false, endMode, lifeTime)
+                }
+
+                1 -> if (mask) {
                     val translate = 0.5
                     impact.proxy.beam(
                         world,
@@ -92,7 +94,7 @@ class LaserPushPacket(
                         vec2.x() + translate,
                         vec2.y() + translate,
                         vec2.z() + translate, type,
-                        0x770ED0, false,
+                        color, false,
                         endMode, lifeTime
                     )
                 }

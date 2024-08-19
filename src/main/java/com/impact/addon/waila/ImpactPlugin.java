@@ -19,9 +19,9 @@ import com.impact.mods.gregtech.tileentities.multi.matrixsystem.GTMTE_MPStabiliz
 import com.impact.mods.gregtech.tileentities.multi.ores.GTMTE_AdvancedMiner;
 import com.impact.mods.gregtech.tileentities.multi.ores.GTMTE_BasicMiner;
 import com.impact.mods.gregtech.tileentities.multi.ores.GTMTE_Mining_Coal;
+import com.impact.mods.gregtech.tileentities.multi.parallelsystem.GTMTE_CommunicationTower_Receiver;
 import com.impact.mods.gregtech.tileentities.multi.parallelsystem.GTMTE_ParallelHatch_Input;
 import com.impact.mods.gregtech.tileentities.multi.parallelsystem.GTMTE_ParallelHatch_Output;
-import com.impact.mods.gregtech.tileentities.multi.parallelsystem.GTMTE_CommunicationTower_Receiver;
 import com.impact.mods.gregtech.tileentities.multi.parallelsystem.GTMTE_TowerCommunication;
 import com.impact.mods.gregtech.tileentities.multi.storage.GTMTE_LapPowerStation;
 import com.impact.mods.gregtech.tileentities.multi.storage.GTMTE_MultiTank;
@@ -200,11 +200,6 @@ public class ImpactPlugin extends PluginBase {
                     long distance = tag.getLong("pipeline.distance");
                     currenttip.add(String.format(trans("waila.pipeline.distance"),
                             distance < pipeline.getMinDistance() ? EnumChatFormatting.RED + trans("waila.pipeline.low_distance") : distance));
-
-                    if (tag.hasKey("energyInput"))
-                        currenttip.add(trans("waila.input") + ": " + GREEN + GT_Utility.formatNumbers(tag.getLong("energyInput")) + RESET + " " + trans("waila.eut"));
-                    if (tag.hasKey("energyOutput"))
-                        currenttip.add(trans("waila.output") + ": " + RED + GT_Utility.formatNumbers(tag.getLong("energyOutput")) + RESET + " " + trans("waila.eut"));
                 }
             }
 
@@ -217,8 +212,15 @@ public class ImpactPlugin extends PluginBase {
             }
 
             if (aerostat != null) {
-                if (!tag.getString("aerostatName").isEmpty())
-                    currenttip.add(trans("waila.aerostat.namestation") + ": " + EnumChatFormatting.GOLD + tag.getString("aerostatName"));
+                String name = tag.getString("aerostatName");
+                if (!name.isEmpty())
+                    currenttip.add(trans("waila.aerostat.namestation") + ": " + EnumChatFormatting.GOLD + name);
+                else
+                    currenttip.add(EnumChatFormatting.RED + trans("waila.aerostat.no_valid_station"));
+
+                String owner = tag.getString("aerostatOwner");
+                if (!owner.isEmpty())
+                    currenttip.add(trans("waila.aerostat.owner") + ": " + EnumChatFormatting.GREEN + owner);
             }
 
             if (reactorHatch != null) {
@@ -471,10 +473,6 @@ public class ImpactPlugin extends PluginBase {
                 if (pipeline instanceof GTMTE_LongDistancePipelineEnergy) {
                     tag.setLong("pipeline.distance", pipeline.getDistance());
                     tag.setBoolean("pipeline.isSender", pipeline.isSender());
-                    if (pipeline.isSender())
-                        tag.setLong("energyInput", pipeline.getBaseMetaTileEntity().getAverageElectricInput());
-                    else
-                        tag.setLong("energyOutput", pipeline.getBaseMetaTileEntity().getAverageElectricOutput());
                 }
             }
             
@@ -520,7 +518,8 @@ public class ImpactPlugin extends PluginBase {
             }
 
             if (aerostat != null) {
-                tag.setString("aerostatName", aerostat.aerName);
+                tag.setString("aerostatName", aerostat.getName());
+                tag.setString("aerostatOwner", aerostat.getOwner());
             }
 
             if (reactorHatch != null) {
@@ -561,7 +560,7 @@ public class ImpactPlugin extends PluginBase {
             }
 
             if (towerCommunication != null) {
-                tag.setBoolean("towerCommunicationConnect", towerCommunication.getConnectionStatus());
+                tag.setBoolean("towerCommunicationConnect", towerCommunication.isSatelliteConnected());
             }
 
             if (reactor != null) {
@@ -578,7 +577,7 @@ public class ImpactPlugin extends PluginBase {
                 final int Parallel = MultiParallel.mParallel;
                 tag.setInteger("Parallel", Parallel);
                 tag.setInteger("currentParallel", MultiParallel.mCheckParallelCurrent);
-                tag.setBoolean("connectWithTower", MultiParallel.getConnectionStatus());
+                tag.setBoolean("connectWithTower", MultiParallel.isSatelliteConnected());
             }
 
             if (tMeta instanceof GTMTE_LapPowerStation) {

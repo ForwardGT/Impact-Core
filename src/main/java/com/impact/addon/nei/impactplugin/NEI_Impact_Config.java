@@ -3,10 +3,7 @@ package com.impact.addon.nei.impactplugin;
 import codechicken.nei.NEIModContainer;
 import codechicken.nei.api.IConfigureNEI;
 import com.impact.addon.nei.impactplugin.builder.HandlerInfoRegister;
-import com.impact.addon.nei.impactplugin.ores.NEI_Impact_DimOres;
 import com.impact.addon.nei.impactplugin.ores.NEI_Impact_HammerDrop;
-import com.impact.addon.nei.impactplugin.ores.NEI_Impact_Ores;
-import com.impact.addon.nei.impactplugin.ores.OreBuilderNEI;
 import com.impact.core.Impact_API;
 import com.impact.mods.gregtech.GT_RecipeMaps;
 import com.impact.mods.gregtech.tileentities.multi.processing.defaultmachines.GTMTE_RailAssembler;
@@ -66,12 +63,9 @@ public class NEI_Impact_Config implements IConfigureNEI {
 			new GT_NEI_HeavyMetalCyclone(GT_Recipe.GT_Recipe_Map.sCyclonRecipes);
 			new NEI_Impact_RailAssembler(GTMTE_RailAssembler.sTrackAssemblerRecipes);
 			new NEI_Impact_MEProvider(GT_RecipeMaps.sMESystemProvider);
-			new NEI_Impact_Ores(OreBuilderNEI.defaultOres, 1);
-			new NEI_Impact_DimOres(OreBuilderNEI.dimDefaultOres, 1);
-			new NEI_Impact_Ores(OreBuilderNEI.smallOres, 0);
-			new NEI_Impact_DimOres(OreBuilderNEI.dimSmallOres, 0);
 			new NEI_Impact_HammerDrop(Impact_API.dropsFromBlock);
 			new NEI_Impact_DryingRack();
+			new GT_NEI_Pyro(GT_RecipeMaps.sPyrolyseOven);
 			registerSingle();
 			registerHandlerInfo();
 		}
@@ -97,7 +91,7 @@ public class NEI_Impact_Config implements IConfigureNEI {
 		new HandlerInfoRegister(GT_RecipeMaps.sDryingOven, Drying_Oven_LV);
 		new HandlerInfoRegister(GT_RecipeMaps.sMESystemProvider, ME_System_Provider);
 		new HandlerInfoRegister(sTesseractRecipes, Machine_MultiblockTesseract);
-		new HandlerInfoRegister(sPyrolyseBasicVisual, Pyrolyse);
+		new HandlerInfoRegister(GT_RecipeMaps.sPyrolyseOven, Pyrolyse);
 		new HandlerInfoRegister(sLiquidENqGenerator, Naquadah_Liquid_Enriched);
 		new HandlerInfoRegister(sLiquidNqGenerator, Naquadah_Liquid_multi);
 		new HandlerInfoRegister(sHyperGenerator, Naquadah_multi);

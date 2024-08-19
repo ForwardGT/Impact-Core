@@ -162,7 +162,6 @@ public class GTMTE_HyperNaquadahGenerator extends GTMTE_Impact_BlockBase<GTMTE_H
 				.addMaintenanceHatch()
 				.addInputHatch(3)
 				.addCasingInfo("case", "Naquadah Base Casing")
-				.addOtherStructurePart("other.0", "Naquadah Chamber Casing", "other.1", "inside structure")
 				.addOtherStructurePart("other.2", "Tether Core", "other.3", "for contain core Nq")
 				.signAndFinalize();
 		return b;
@@ -187,9 +186,9 @@ public class GTMTE_HyperNaquadahGenerator extends GTMTE_Impact_BlockBase<GTMTE_H
 	public static class Runner implements Runnable {
 		
 		public int[] FUEL_PER_SECOND = new int[]{ //for 1A
-				20,
 				10,
 				5,
+				2,
 		};
 		
 		public ItemStack[] FUEL_NAME = new ItemStack[]{

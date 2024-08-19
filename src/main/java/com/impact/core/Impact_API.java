@@ -1,21 +1,13 @@
 package com.impact.core;
 
-import com.impact.common.oregeneration.OreGenerator;
-import com.impact.common.oregeneration.OreVein;
-import com.impact.common.oregeneration.generator.OresRegionGenerator;
 import com.impact.mods.gregtech.enums.DropsBlock;
+import com.impact.util.PositionObject;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Impact_API {
-	
-	/**
-	 * Ore Regions
-	 */
-	public static final Map<Integer, OresRegionGenerator> regionsOres = new HashMap<>();
-	public static final Map<Integer, OreVein> registerVeins = new HashMap<>();
-	
+
 	/**
 	 * Drops from harvest blocks
 	 */
@@ -35,9 +27,4 @@ public class Impact_API {
 	 * The Space Elevator Frequencies
 	 */
 	public static final Map<String, int[]> sElevatorSpace = new ConcurrentHashMap<>();
-	
-	/**
-	 * The Space Elevator Frequencies
-	 */
-	public static final Map<String, int[]> sAerostat = new LinkedHashMap<>();
 }

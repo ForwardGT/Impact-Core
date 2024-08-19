@@ -108,10 +108,12 @@ item.impact_kinetic_rotors.2.name=Stainless Steel Kinetic Rotor
 item.impact_kinetic_rotors.3.name=Titanium Kinetic Rotor
 item.impact_kinetic_rotors.4.name=Tungstensteel Kinetic Rotor
 
-
 #Covers
-item.impact_cover.0.name=Advanced Fluid Detector (Cover)
-item.impact_cover.1.name=Advanced Energy Detector (Cover)
+item.impact_cover.0.name=Advanced Fluid Detector - Bound Mode (Cover)
+item.impact_cover.1.name=Advanced Energy Detector - Bound Mode (Cover)
+item.impact_cover.2.name=Debug Energy Generator (Cover)
+item.impact_cover.3.name=Advanced Fluid Detector - Range Mode (Cover)
+item.impact_cover.4.name=Advanced Energy Detector - Range Mode (Cover)
 
 #MetaItems.00
 item.impact_item.0.name=BarnardaE Stone Dust
@@ -382,6 +384,9 @@ item.impact_item2.206.name=64 Core Co-Processor
 item.impact_item2.207.name=256 Core Co-Processor
 item.impact_item2.208.name=1024 Core Co-Processor
 item.impact_item2.209.name=4096 Core Co-Processor
+item.impact_item2.210.name=Lead Meitnerium Compressed Plate
+item.impact_item2.211.name=Osmium Compressed Plate
+
 
 item.impact_item3.0.name=Empty Portable Cell with Matrix Particles
 item.impact_item3.1.name=Full Portable Cell with Matrix Particles
@@ -511,6 +516,8 @@ waila.pipeline.recipient=Recipient
 waila.pipeline.distance=Distance: %s
 waila.pipeline.low_distance=Low Distance
 waila.aerostat.namestation=Name Station
+waila.aerostat.owner=Owner Station
+waila.aerostat.no_valid_station=Station is not available
 waila.reactorhatch.id=ID
 waila.reactorhatch.level=Level Rod
 waila.reactorhatch.decay=Speed Decay

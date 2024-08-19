@@ -1,12 +1,13 @@
 package com.impact.mods.gregtech.tileentities.multi.parallelsystem;
 
-import com.impact.addon.gt.api.satellite.gui.SatelliteNetworkContainer;
-import com.impact.addon.gt.api.satellite.gui.SatelliteNetworkGui;
+import com.impact.addon.gt.api.parallel_system.INetworkTower;
 import com.impact.addon.gt.api.position.IPosition;
 import com.impact.addon.gt.api.satellite.IConnection;
 import com.impact.addon.gt.api.satellite.ISatellite;
 import com.impact.addon.gt.api.satellite.ISatelliteNetwork;
 import com.impact.addon.gt.api.satellite.SatelliteNetworkManager;
+import com.impact.addon.gt.api.satellite.gui.SatelliteNetworkContainer;
+import com.impact.addon.gt.api.satellite.gui.SatelliteNetworkGui;
 import com.impact.addon.gt.api.security.ISecurity;
 import com.impact.client.gui.GUIHandler;
 import com.impact.util.PositionObject;
@@ -18,7 +19,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,14 +42,16 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 	
 	public ISatellite satellite = null;
 	private IPosition satellitePos = null;
+
+	private INetworkTower tower = null;
 	
 	public GTMTE_CommunicationTower_Receiver(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional, 3, 0, new String[]{
 				Utilits.impactTag(),
 				"Receiving signals from orbit",
 				"Used in Communication Tower",
-				EnumChatFormatting.RED + "▉" + EnumChatFormatting.GRAY + " - Error",
-				EnumChatFormatting.GREEN + "▉" + EnumChatFormatting.GRAY + " - All Right"
+				EnumChatFormatting.RED + "[]" + EnumChatFormatting.GRAY + " - Error",
+				EnumChatFormatting.GREEN + "[]" + EnumChatFormatting.GRAY + " - All Right"
 		});
 	}
 	
@@ -166,7 +168,9 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 		super.saveNBTData(aNBT);
 		aNBT.setInteger("mFrequency", this.mFrequency);
 		aNBT.setBoolean("mIsReceive", this.isConnected);
-		aNBT.setString("security", this.security);
+
+		if (security != null && !security.isEmpty())
+			aNBT.setString("security", this.security);
 		
 		if (satellite != null) {
 			NBTTagCompound satelliteNbt = satellite.getPosition().saveToNBT();
@@ -199,7 +203,13 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 			satellite.disconnect(this);
 			satellite = null;
 			getBaseMetaTileEntity().setActive(isConnected = false);
+			callTower();
 		}
+	}
+
+	private void callTower() {
+		if (tower != null)
+			tower.updateLocalNetwork();
 	}
 	
 	public boolean hasConnected() {
@@ -224,6 +234,7 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 		if (satellite != null) {
 			isConnected = satellite.onFirstConnect(mFrequency, this);
 			getBaseMetaTileEntity().setActive(isConnected);
+			callTower();
 		}
 	}
 	
@@ -233,6 +244,7 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 		IGregTechTileEntity te = getBaseMetaTileEntity();
 		if (te != null) {
 			te.setActive(isConnected);
+			callTower();
 		}
 	}
 	
@@ -260,4 +272,9 @@ public class GTMTE_CommunicationTower_Receiver extends GT_MetaTileEntity_Hatch i
 	public String getSecurity() {
 		return security;
 	}
+
+	public void connectToTower(INetworkTower tower) {
+		this.tower = tower;
+	}
+
 }
